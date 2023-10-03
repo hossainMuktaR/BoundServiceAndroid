@@ -30,9 +30,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.clientserviceapp.Constants.GET_RANDOM_NUMBER
 import com.example.clientserviceapp.ui.theme.ClientServiceAppTheme
-import com.example.serverserviceapp.IRandomNumberInterface
 
-class MainActivity : ComponentActivity() {
+class MessengerExampleActivity : ComponentActivity() {
     private var mService: Messenger? = null
     private var mClientService: Messenger? = null
     private var bound by mutableStateOf(false)
@@ -65,6 +64,9 @@ class MainActivity : ComponentActivity() {
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center
                     ) {
+                        Text(
+                            text = "Messenger Bound",
+                        )
                         Text(
                             text = if (randomNumber != 0) "Random Number: $randomNumber" else "service not Bound",
                             style = MaterialTheme.typography.headlineMedium,
@@ -100,7 +102,7 @@ class MainActivity : ComponentActivity() {
                         Button(
                             enabled = !bound,
                             onClick = {
-
+                                gotoAIDLExampleActivity()
                             }) {
                             Text(text = "UnBound Service")
                         }
@@ -110,7 +112,7 @@ class MainActivity : ComponentActivity() {
         }
     }
     private fun gotoAIDLExampleActivity() {
-        Intent(this, MainActivity2::class.java).also {
+        Intent(this, AidlExampleActivity::class.java).also {
             startActivity(it)
         }
     }

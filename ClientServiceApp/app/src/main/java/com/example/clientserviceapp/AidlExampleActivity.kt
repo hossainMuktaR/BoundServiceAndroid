@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -23,46 +24,57 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.clientserviceapp.ui.theme.ClientServiceAppTheme
 import com.example.serverserviceapp.IRandomNumberInterface
 
-class MainActivity2 : ComponentActivity() {
+class AidlExampleActivity : ComponentActivity() {
     private var mClientService: IRandomNumberInterface? = null
     private var bound by mutableStateOf(false)
     private var randomNumber by mutableStateOf(0)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Text(
-                    text = if (randomNumber != 0) "Random Number: $randomNumber" else "service not Bound",
-                    style = MaterialTheme.typography.headlineMedium,
-                )
-                Spacer(Modifier.height(16.dp))
-                Button(
-                    enabled = bound,
-                    onClick = {
-                        randomNumber = mClientService?.randomNumber ?: 0
-                    }
+            ClientServiceAppTheme {
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
                 ) {
-                    Text("Get Number")
-                }
-                Button(
-                    enabled = !bound,
-                    onClick = {
-                        boundService()
-                    }) {
-                    Text(text = "Bound Service")
-                }
-                Button(
-                    enabled = bound,
-                    onClick = {
-                        unBoundService()
-                    }) {
-                    Text(text = "UnBound Service")
+                    Column(
+                        modifier = Modifier.fillMaxSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Text(
+                            text = "AIDL Bound"
+                        )
+                        Text(
+                            text = if (randomNumber != 0) "Random Number: $randomNumber" else "service not Bound",
+                            style = MaterialTheme.typography.headlineMedium,
+                        )
+                        Spacer(Modifier.height(16.dp))
+                        Button(
+                            enabled = bound,
+                            onClick = {
+                                randomNumber = mClientService?.randomNumber ?: 0
+                            }
+                        ) {
+                            Text("Get Number")
+                        }
+                        Button(
+                            enabled = !bound,
+                            onClick = {
+                                boundService()
+                            }) {
+                            Text(text = "Bound Service")
+                        }
+                        Button(
+                            enabled = bound,
+                            onClick = {
+                                unBoundService()
+                            }) {
+                            Text(text = "UnBound Service")
+                        }
+                    }
                 }
             }
         }

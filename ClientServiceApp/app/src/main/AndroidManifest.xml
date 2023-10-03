@@ -17,10 +17,10 @@
         android:theme="@style/Theme.ClientServiceApp"
         tools:targetApi="31" >
         <activity
-            android:name=".MainActivity2"
+            android:name=".AidlExampleActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".MessengerExampleActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.ClientServiceApp" >
