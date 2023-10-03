@@ -30,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.clientserviceapp.Constants.GET_RANDOM_NUMBER
 import com.example.clientserviceapp.ui.theme.ClientServiceAppTheme
+import com.example.serverserviceapp.IRandomNumberInterface
 
 class MainActivity : ComponentActivity() {
     private var mService: Messenger? = null
@@ -96,10 +97,21 @@ class MainActivity : ComponentActivity() {
                             }) {
                             Text(text = "UnBound Service")
                         }
-                    }
+                        Button(
+                            enabled = !bound,
+                            onClick = {
 
+                            }) {
+                            Text(text = "UnBound Service")
+                        }
+                    }
                 }
             }
+        }
+    }
+    private fun gotoAIDLExampleActivity() {
+        Intent(this, MainActivity2::class.java).also {
+            startActivity(it)
         }
     }
 
