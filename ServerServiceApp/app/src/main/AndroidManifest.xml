@@ -23,6 +23,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <service
+            android:name=".RandomNumberService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.example.serverserviceapp.RandomNumberService"/>
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>
