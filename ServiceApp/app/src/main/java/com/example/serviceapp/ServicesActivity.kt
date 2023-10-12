@@ -17,20 +17,17 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.serviceapp.ui.theme.ServiceAppTheme
 
-class MainActivity : ComponentActivity() {
-    private var mService: RandomNumberService? = null
-    private var bound by mutableStateOf(false)
-    private var randomNumber by mutableStateOf(0)
+class ServicesActivity : ComponentActivity() {
+//    private var randomNumber by mutableStateOf(0)
+    private var isRunning by mutableStateOf(false)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -45,32 +42,26 @@ class MainActivity : ComponentActivity() {
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center
                     ) {
-                        Text(
-                            text = if (randomNumber != 0) "Random Number: $randomNumber" else "service not Bound",
-                            style = MaterialTheme.typography.headlineMedium,
-                        )
-                        Spacer(Modifier.height(16.dp))
                         Button(
-                            enabled = bound,
+                            enabled = !isRunning,
                             onClick = {
-                                randomNumber = mService?.mRandomNumber ?: 0
-                            }
-                        ) {
-                            Text("Get Number")
+                                startBackgroundService()
+                            }) {
+                            Text(text = "Start Service")
                         }
                         Button(
-                            enabled = !bound,
+                            enabled = isRunning,
                             onClick = {
-                                boundService()
+                                stopBackgroundService()
                             }) {
-                            Text(text = "Bound Service")
+                            Text(text = "Stop Service")
                         }
                         Button(
-                            enabled = bound,
+                            enabled = !isRunning,
                             onClick = {
-                                unBoundService()
+                                gotoBoundActivity()
                             }) {
-                            Text(text = "UnBound Service")
+                            Text(text = "Goto BoundService")
                         }
                     }
 
@@ -78,39 +69,24 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-    override fun onStart() {
-        super.onStart()
-        boundService()
-    }
-
-    private fun boundService() {
-        Intent(this, RandomNumberService::class.java).also { intent ->
-            bindService(intent, mConnection, Context.BIND_AUTO_CREATE)
+    private fun startBackgroundService() {
+        Intent(this, BackgroundService::class.java).also { intent ->
+            intent.action = "START_ACTION"
+            startService(intent)
         }
+        isRunning = true
     }
-
-    override fun onStop() {
-        super.onStop()
-        unBoundService()
-    }
-
-    private fun unBoundService() {
-        if (bound) {
-            unbindService(mConnection)
-            bound = false
-            randomNumber = 0
+    private fun stopBackgroundService() {
+        Intent(this, BackgroundService::class.java).also { intent ->
+            intent.action = "STOP_ACTION"
+            startService(intent)
         }
+        isRunning = false
     }
-    private val mConnection = object : ServiceConnection {
-        override fun onServiceConnected(p0: ComponentName?, binder: IBinder?) {
-            val binder = binder as RandomNumberService.LocalBinder
-            mService = binder.getService()
-            bound = true
-        }
 
-        override fun onServiceDisconnected(p0: ComponentName?) {
-            mService = null
-            bound = false
+    private fun gotoBoundActivity() {
+        Intent(this,BoundActivity::class.java).also {
+            startActivity(it)
         }
     }
 
